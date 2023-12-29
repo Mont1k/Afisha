@@ -8,5 +8,5 @@ urlpatterns = [
     path('movies/', views.movie_list),
     path('movies/<int:id>/', views.movie_detail),
     path('reviews/', views.review_list),
-    path('reviews/<int:id>/', views.review_detail),
+    path('reviews/<int:id>/', views.review_detail)
 ]
