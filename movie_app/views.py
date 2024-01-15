@@ -6,7 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import Director, Movie, Review
-from .serializers import DirectorSerializer, MovieSerializer, ReviewSerializer
+from .serializers import (DirectorSerializer, MovieSerializer, ReviewSerializer,
+                          DirectorValidatorSerializer)
 
 
 @api_view(['GET', 'POST'])
@@ -16,10 +17,11 @@ def director_list(request):
         serializer = DirectorSerializer(directors, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        serializer = DirectorSerializer(data=request.data)
+        serializer = DirectorValidatorSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            Director.objects.create(name=serializer.validate['name'])
+            return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -30,8 +32,9 @@ def director_detail(request, id):
         serializer = DirectorSerializer(director)
         return Response(serializer.data)
     elif request.method == 'PUT':
-        serializer = DirectorSerializer(director, data=request.data)
+        serializer = DirectorValidatorSerializer(data=request.data)
         if serializer.is_valid():
+            director.name = serializer.validated_data['name']
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
