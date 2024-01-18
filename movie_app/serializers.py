@@ -7,7 +7,7 @@ from .models import Director, Movie, Review
 class DirectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Director
-        fields = ['id', 'name']
+        fields ='__all__'
 
 
 class DirectorValidatorSerializer(serializers.Serializer):
@@ -17,7 +17,7 @@ class DirectorValidatorSerializer(serializers.Serializer):
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = ['id', 'title', 'description', 'duration', 'director']
+        fields = '__all__'
 
 
 class MovieValidatorSerializer(serializers.Serializer):
